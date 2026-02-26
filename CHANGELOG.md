@@ -10,3 +10,4 @@
 - Implement full template rendering with text/template support
 - Add custom function registration via AddFunc
 - Add docforge struct tag support for placeholder mapping
+- Implement table row iteration with correct XML preprocessing
