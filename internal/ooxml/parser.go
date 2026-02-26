@@ -37,7 +37,7 @@ func Open(path string) (*Document, error) {
 	if !ok {
 		return nil, fmt.Errorf("invalid docx: missing %s", documentXMLPath)
 	}
-	doc.xmlDoc = xmlDoc
+	doc.xmlDoc = normalizeRuns(xmlDoc)
 
 	return doc, nil
 }
