@@ -11,3 +11,5 @@
 - Add custom function registration via AddFunc
 - Add docforge struct tag support for placeholder mapping
 - Implement table row iteration with correct XML preprocessing
+- Add unit tests for run normalization and table preprocessing
+- Add integration tests for public API
