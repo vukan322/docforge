@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [0.1.0] - 2026-02-26
 - Initial project structure
 - README and API design
 - Implement docx open and save with zero style mutation
