@@ -2,6 +2,7 @@ package ooxml
 
 import (
 	"archive/zip"
+	"encoding/xml"
 	"fmt"
 	"io"
 )
@@ -48,4 +49,14 @@ func readZipFile(f *zip.File) ([]byte, error) {
 	}
 	defer rc.Close()
 	return io.ReadAll(rc)
+}
+
+type XMLBody struct {
+	XMLName  xml.Name `xml:"body"`
+	InnerXML []byte   `xml:",innerxml"`
+}
+
+type XMLDocument struct {
+	XMLName  xml.Name `xml:"document"`
+	InnerXML []byte   `xml:",innerxml"`
 }
