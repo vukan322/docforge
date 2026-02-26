@@ -7,3 +7,6 @@
 - Add test fixture for round-trip testing
 - Implement placeholder replacement with zero style mutation
 - Add run normalization for split placeholders
+- Implement full template rendering with text/template support
+- Add custom function registration via AddFunc
+- Add docforge struct tag support for placeholder mapping
