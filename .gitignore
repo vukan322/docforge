@@ -31,4 +31,7 @@ go.work.sum
 .idea/
 .vscode/
 
+# Generated test output
 testdata/templates/output.docx
+testdata/templates/debug.xml
+
