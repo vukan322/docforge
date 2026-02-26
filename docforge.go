@@ -21,3 +21,11 @@ func (d *Document) Replace(data any) error {
 func (d *Document) Save(path string) error {
 	return d.doc.Save(path)
 }
+
+func (d *Document) Render(data any, outputPath string) error {
+	return d.doc.Render(data, outputPath)
+}
+
+func (d *Document) AddFunc(name string, fn any) {
+	d.doc.AddFunc(name, fn)
+}

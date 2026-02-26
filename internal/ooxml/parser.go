@@ -12,6 +12,7 @@ const documentXMLPath = "word/document.xml"
 type Document struct {
 	files  map[string][]byte
 	xmlDoc []byte
+	funcs  map[string]any
 }
 
 func Open(path string) (*Document, error) {

@@ -15,15 +15,15 @@ func (d *Document) Replace(data any) error {
 
 	for placeholder, value := range fields {
 		old := []byte("{{." + placeholder + "}}")
-		new := []byte(value)
+		new := []byte(sanitizeXML(fmt.Sprintf("%v", value)))
 		d.xmlDoc = bytes.ReplaceAll(d.xmlDoc, old, new)
 	}
 
 	return nil
 }
 
-func extractFields(data any) (map[string]string, error) {
-	result := make(map[string]string)
+func extractFields(data any) (map[string]any, error) {
+	result := make(map[string]any)
 
 	v := reflect.ValueOf(data)
 	if v.Kind() == reflect.Ptr {
@@ -36,11 +36,15 @@ func extractFields(data any) (map[string]string, error) {
 		for i := 0; i < v.NumField(); i++ {
 			field := t.Field(i)
 			value := v.Field(i)
-			result[field.Name] = sanitizeXML(fmt.Sprintf("%v", value.Interface()))
+			key := field.Name
+			if tag := field.Tag.Get("docforge"); tag != "" {
+				key = tag
+			}
+			result[key] = value.Interface()
 		}
 	case reflect.Map:
 		for _, key := range v.MapKeys() {
-			result[key.String()] = sanitizeXML(fmt.Sprintf("%v", v.MapIndex(key).Interface()))
+			result[key.String()] = v.MapIndex(key).Interface()
 		}
 	default:
 		return nil, fmt.Errorf("data must be a struct or map, got %s", v.Kind())
