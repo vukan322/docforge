@@ -15,6 +15,10 @@ type Document struct {
 	funcs  map[string]any
 }
 
+func (d *Document) GetXML() []byte {
+	return d.xmlDoc
+}
+
 func Open(path string) (*Document, error) {
 	r, err := zip.OpenReader(path)
 	if err != nil {

@@ -17,7 +17,9 @@ func (d *Document) Render(data any, outputPath string) error {
 		funcMap[name] = fn
 	}
 
-	tpl, err := template.New("docforge").Funcs(funcMap).Parse(string(d.xmlDoc))
+	processed := preprocessTables(d.xmlDoc)
+
+	tpl, err := template.New("docforge").Funcs(funcMap).Parse(string(processed))
 	if err != nil {
 		return fmt.Errorf("failed to parse template: %w", err)
 	}
