@@ -14,6 +14,90 @@ without mutating your document styles.
 
 ---
 
+## Simple replacement
+
+For basic placeholder replacement without a full template engine:
+
+```go
+doc, err := docforge.Open("template.docx")
+if err != nil {
+    log.Fatal(err)
+}
+
+err = doc.Replace(map[string]any{
+    "Name":    "Luka",
+    "Company": "Kantech",
+})
+if err != nil {
+    log.Fatal(err)
+}
+
+err = doc.Save("output.docx")
+if err != nil {
+    log.Fatal(err)
+}
+```
+
+In your Word template use '{{.Name}}' and '{{.Company}}' as placeholders.
+
+---
+
+## Full template rendering
+
+For range, conditionals, and custom functions:
+
+```go
+doc, err := docforge.Open("template.docx")
+if err != nil {
+    log.Fatal(err)
+}
+
+doc.AddFunc("formatDate", func(t time.Time) string {
+    return t.Format("02.01.2006")
+})
+
+err = doc.Render(map[string]any{
+    "Name": "Luka",
+    "Date": time.Now(),
+    "Items": []map[string]any{
+        {"Product": "Valve", "Qty": 3},
+        {"Product": "Pump",  "Qty": 1},
+    },
+}, "output.docx")
+if err != nil {
+    log.Fatal(err)
+}
+```
+
+---
+
+## Struct tag support
+
+Use the 'docforge' struct tag to control placeholder names:
+
+```go
+type Invoice struct {
+    FirstName string  `docforge:"first_name"`
+    Amount    float64 `docforge:"amount"`
+}
+```
+
+'{{.first_name}}' and '{{.amount}}' in your template will map to the struct fields.
+Without a tag, the field name is used as-is.
+
+---
+
+## Template syntax
+
+| Syntax | Purpose |
+|---|---|
+| '{{.FieldName}}' | Simple value replacement |
+| '{{range .Items}} ... {{end}}' | Table row iteration |
+| '{{if .Flag}} ... {{end}}' | Conditional content |
+| '{{.Date \| formatDate}}' | Custom function |
+
+---
+
 ## Create a document from scratch
 
 ```go
@@ -27,55 +111,13 @@ doc.AddTable([][]string{
 })
 
 err := doc.Save("output.docx")
-```
-
----
-
-## Fill a template with data
-
-```go
-tpl, err := docforge.OpenTemplate("template.docx")
 if err != nil {
     log.Fatal(err)
 }
-
-data := map[string]any{
-    "Name":    "Luka",
-    "Company": "Kantech",
-}
-
-err = tpl.Render(data, "output.docx")
 ```
-
-In your Word template use '{{.Name}}' and '{{.Company}}' as placeholders.
-
----
-
-## Modify an existing document
-
-```go
-doc, err := docforge.Open("existing.docx")
-if err != nil {
-    log.Fatal(err)
-}
-
-doc.ReplaceParagraph("old text", "new text")
-
-err = doc.Save("modified.docx")
-```
-
----
-
-## Template Syntax
-
-| Syntax | Purpose |
-|---|---|
-| '{{.FieldName}}' | Simple value replacement |
-| '{{range .Slice}} ... {{end}}' | Table row iteration |
-| '{{if .Flag}} ... {{end}}' | Conditional content |
 
 ---
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the 'LICENSE' file for details.
