@@ -7,9 +7,5 @@ linters:
     - staticcheck
     - unused
 
-linters-settings:
-  govet:
-    enable-all: true
-
 run:
   timeout: 5m
