@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-02-27
+- Add GitHub Actions CI pipeline with lint, vet, and tests
+- Fix nested {{if}} blocks inside table rows being misidentified as range terminators
+- Fix errcheck violations across parser, writer, and tests
+- Improved CONTRIBUTING.md
+
 ## [0.1.0] - 2026-02-26
 - Initial project structure
 - README and API design
