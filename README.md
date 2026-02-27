@@ -10,7 +10,9 @@ without mutating your document styles.
 
 ## Installation
 
-'go get github.com/vukan322/docforge'
+```go
+go get github.com/vukan322/docforge
+```
 
 ---
 
@@ -38,7 +40,7 @@ if err != nil {
 }
 ```
 
-In your Word template use '{{.Name}}' and '{{.Company}}' as placeholders.
+In your Word template use `{{.Name}}` and `{{.Company}}` as placeholders.
 
 ---
 
@@ -73,7 +75,7 @@ if err != nil {
 
 ## Struct tag support
 
-Use the 'docforge' struct tag to control placeholder names:
+Use the `docforge` struct tag to control placeholder names:
 
 ```go
 type Invoice struct {
@@ -82,7 +84,7 @@ type Invoice struct {
 }
 ```
 
-'{{.first_name}}' and '{{.amount}}' in your template will map to the struct fields.
+`{{.first_name}}` and `{{.amount}}` in your template will map to the struct fields.
 Without a tag, the field name is used as-is.
 
 ---
@@ -91,14 +93,17 @@ Without a tag, the field name is used as-is.
 
 | Syntax | Purpose |
 |---|---|
-| '{{.FieldName}}' | Simple value replacement |
-| '{{range .Items}} ... {{end}}' | Table row iteration |
-| '{{if .Flag}} ... {{end}}' | Conditional content |
-| '{{.Date \| formatDate}}' | Custom function |
+| `{{.FieldName}}` | Simple value replacement |
+| `{{range .Items}} ... {{end}}` | Table row iteration |
+| `{{if .Flag}} ... {{end}}` | Conditional content |
+| `{{.Date \| formatDate}}` | Custom function |
 
 ---
 
 ## Create a document from scratch
+
+> This feature is planned for v2. See the [changelog](CHANGELOG.md) for current status.
+> The API below is a preview and not yet implemented.
 
 ```go
 doc := docforge.New()
@@ -120,4 +125,4 @@ if err != nil {
 
 ## License
 
-This project is licensed under the MIT License - see the 'LICENSE' file for details.
+This project is licensed under the MIT License - see the `LICENSE` file for details.
