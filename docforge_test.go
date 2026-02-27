@@ -45,7 +45,7 @@ func TestReplace_Placeholder(t *testing.T) {
 		t.Fatalf("failed to save: %v", err)
 	}
 
-	defer os.Remove(testOutput)
+	defer func() { _ = os.Remove(testOutput) }()
 }
 
 func TestReplace_StructTag(t *testing.T) {
@@ -68,7 +68,7 @@ func TestReplace_StructTag(t *testing.T) {
 		t.Fatalf("failed to save: %v", err)
 	}
 
-	defer os.Remove(testOutput)
+	defer func() { _ = os.Remove(testOutput) }()
 }
 
 func TestRender_WithItems(t *testing.T) {
@@ -88,7 +88,7 @@ func TestRender_WithItems(t *testing.T) {
 		t.Fatalf("failed to render: %v", err)
 	}
 
-	defer os.Remove(testOutput)
+	defer func() { _ = os.Remove(testOutput) }()
 }
 
 func TestRender_WithAddFunc(t *testing.T) {
@@ -119,7 +119,7 @@ func TestRender_WithAddFunc(t *testing.T) {
 		t.Fatalf("failed to render with func: %v", err)
 	}
 
-	defer os.Remove(testOutput)
+	defer func() { _ = os.Remove(testOutput) }()
 }
 
 func TestSave_RoundTrip(t *testing.T) {
@@ -138,5 +138,5 @@ func TestSave_RoundTrip(t *testing.T) {
 		t.Fatalf("saved file is not a valid docx: %v", err)
 	}
 
-	defer os.Remove(testOutput)
+	defer func() { _ = os.Remove(testOutput) }()
 }

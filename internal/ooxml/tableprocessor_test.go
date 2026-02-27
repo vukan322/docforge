@@ -69,3 +69,24 @@ func TestPreprocessTable_DataRowPreserved(t *testing.T) {
 		t.Errorf("expected data row placeholder {{.Name}} to be preserved")
 	}
 }
+
+func TestPreprocessTable_IfInsideDataRow(t *testing.T) {
+	input := []byte(`<w:tbl><w:tblPr></w:tblPr><w:tblGrid></w:tblGrid>` +
+		`<w:tr><w:tc><w:p><w:r><w:t>{{range .Items}}</w:t></w:r></w:p></w:tc></w:tr>` +
+		`<w:tr><w:tc><w:p><w:r><w:t>{{if .Active}}{{.Name}}{{end}}</w:t></w:r></w:p></w:tc></w:tr>` +
+		`<w:tr><w:tc><w:p><w:r><w:t>{{end}}</w:t></w:r></w:p></w:tc></w:tr>` +
+		`</w:tbl>`)
+
+	result := preprocessTables(input)
+
+	if !bytes.Contains(result, []byte("{{if .Active}}")) {
+		t.Error("expected {{if .Active}} to be preserved in output")
+	}
+
+	endIdx := bytes.LastIndex(result, []byte("{{end}}"))
+	lastTrIdx := bytes.LastIndex(result, []byte("</w:tr>"))
+
+	if endIdx < lastTrIdx {
+		t.Errorf("expected final {{end}} to appear after last </w:tr>")
+	}
+}

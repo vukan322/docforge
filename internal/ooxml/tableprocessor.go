@@ -25,16 +25,33 @@ func preprocessTable(table []byte) []byte {
 	rangeRowIdx := -1
 	endRowIdx := -1
 	dataRowIdx := -1
+	depth := 0
+
+	openRe := regexp.MustCompile(`{{(range|if|with)\b`)
 
 	for i, loc := range rows {
 		row := table[loc[0]:loc[1]]
-		text := bytes.TrimSpace(extractAllText(row))
-		if bytes.Contains(text, []byte("{{range")) {
+		text := extractAllText(row)
+
+		opens := len(openRe.FindAll(text, -1))
+		ends := bytes.Count(text, []byte("{{end}}"))
+		net := opens - ends
+
+		if rangeRowIdx == -1 && bytes.Contains(text, []byte("{{range")) {
 			rangeRowIdx = i
-		} else if bytes.Contains(text, []byte("{{end}}")) {
-			endRowIdx = i
-		} else if rangeRowIdx != -1 && endRowIdx == -1 {
-			dataRowIdx = i
+			depth = 1
+			continue
+		}
+
+		if rangeRowIdx != -1 {
+			depth += net
+			if depth <= 0 {
+				endRowIdx = i
+				break
+			}
+			if dataRowIdx == -1 {
+				dataRowIdx = i
+			}
 		}
 	}
 
@@ -46,7 +63,6 @@ func preprocessTable(table []byte) []byte {
 	if rangeText == nil {
 		return table
 	}
-	endText := []byte("{{end}}")
 
 	dataRow := make([]byte, rows[dataRowIdx][1]-rows[dataRowIdx][0])
 	copy(dataRow, table[rows[dataRowIdx][0]:rows[dataRowIdx][1]])
@@ -55,9 +71,8 @@ func preprocessTable(table []byte) []byte {
 	result = append(result, table[:rows[rangeRowIdx][0]]...)
 	result = append(result, rangeText...)
 	result = append(result, dataRow...)
-	result = append(result, endText...)
+	result = append(result, []byte("{{end}}")...)
 	result = append(result, table[rows[endRowIdx][1]:]...)
-
 	return result
 }
 

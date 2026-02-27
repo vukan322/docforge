@@ -24,7 +24,7 @@ func Open(path string) (*Document, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to open docx: %w", err)
 	}
-	defer r.Close()
+	defer func() { _ = r.Close() }()
 
 	doc := &Document{
 		files: make(map[string][]byte),
@@ -52,7 +52,7 @@ func readZipFile(f *zip.File) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer rc.Close()
+	defer func() { _ = rc.Close() }()
 	return io.ReadAll(rc)
 }
 
